@@ -9,6 +9,7 @@ var TripSchema = new mongoose.Schema(
     title: String,
     description: String,
     body: String,
+    itineraries: [{ type: mongoose.Schema.Types.ObjectId, ref: "Itinerary" }],
     favoritesCount: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     tagList: [{ type: String }],

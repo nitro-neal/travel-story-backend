@@ -34,7 +34,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 require("./models/User");
 require("./models/Trip");
-require("./models/Itenerary");
+require("./models/Itinerary");
 require("./config/passport");
 
 app.use(require("./routes"));

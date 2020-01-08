@@ -7,6 +7,68 @@ module.exports = {
     res.status(200).json(users);
   },
 
+  getAuthUserProfile: async (req, res, next) => {
+    const user = await User.findById(req.payload.id);
+    res.status(200).json({ user: user.toAuthJSON() });
+  },
+
+  updateUserProfile: async (req, res, next) => {
+    const user = await User.findById(req.payload.id);
+    res.status(200).json({ user: user.toAuthJSON() });
+
+    // only update fields that were actually passed...
+    if (typeof req.body.user.username !== "undefined") {
+      user.username = req.body.user.username;
+    }
+    if (typeof req.body.user.email !== "undefined") {
+      user.email = req.body.user.email;
+    }
+    if (typeof req.body.user.bio !== "undefined") {
+      user.bio = req.body.user.bio;
+    }
+    if (typeof req.body.user.image !== "undefined") {
+      user.image = req.body.user.image;
+    }
+    if (typeof req.body.user.password !== "undefined") {
+      user.setPassword(req.body.user.password);
+    }
+
+    await user.save();
+
+    return res.json({ user: user.toAuthJSON() });
+
+    //   console.log("user updating");
+    //   console.log(req.payload);
+    //   User.findById(req.payload.id)
+    //     .then(function(user) {
+    //       if (!user) {
+    //         return res.sendStatus(401);
+    //       }
+
+    //       // only update fields that were actually passed...
+    //       if (typeof req.body.user.username !== "undefined") {
+    //         user.username = req.body.user.username;
+    //       }
+    //       if (typeof req.body.user.email !== "undefined") {
+    //         user.email = req.body.user.email;
+    //       }
+    //       if (typeof req.body.user.bio !== "undefined") {
+    //         user.bio = req.body.user.bio;
+    //       }
+    //       if (typeof req.body.user.image !== "undefined") {
+    //         user.image = req.body.user.image;
+    //       }
+    //       if (typeof req.body.user.password !== "undefined") {
+    //         user.setPassword(req.body.user.password);
+    //       }
+
+    //       return user.save().then(function() {
+    //         return res.json({ user: user.toAuthJSON() });
+    //       });
+    //     })
+    //     .catch(next);
+  },
+
   newUser: async (req, res, next) => {
     const newUser = new User();
     newUser.username = req.body.user.username;
@@ -18,7 +80,6 @@ module.exports = {
   },
 
   getUserByUsername: async (req, res, next) => {
-    console.log(req.params);
     const user = await User.find({ username: req.params.username });
     res.status(200).json(user);
   },

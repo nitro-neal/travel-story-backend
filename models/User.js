@@ -36,7 +36,7 @@ var UserSchema = new mongoose.Schema(
 );
 
 // TODO: HAVE UNIQUE VALIDATOR
-// UserSchema.plugin(uniqueValidator, { message: "is already taken." });
+UserSchema.plugin(uniqueValidator, { message: "is already taken." });
 
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto
